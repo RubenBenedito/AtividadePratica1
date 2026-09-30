@@ -1,7 +1,7 @@
 {
   "info": {
     "_postman_id": "3564b825-21d0-4bcf-9a4d-97cee2838e67",
-    "name": "New Collection",
+    "name": "SIR_API_TP1",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "_exporter_id": "39682184"
   },
@@ -57,13 +57,18 @@
           "response": []
         },
         {
-          "name": "Apagar Aluno",
+          "name": "Atualizar Aluno",
           "request": {
             "method": "PUT",
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"nome\": \"Carlos\",\r\n  \"apelido\": \"Mendes\",\r\n  \"idCurso\": 3,\r\n  \"anoCurricular\": 1,\r\n  \"idade\": 20\r\n}\r\n"
+              "raw": "{\r\n  \"nome\": \"Carlos\",\r\n  \"apelido\": \"Mendes\",\r\n  \"idCurso\": 3,\r\n  \"anoCurricular\": 1,\r\n  \"idade\": 20\r\n}\r\n",
+              "options": {
+                "raw": {
+                  "language": "text"
+                }
+              }
             },
             "url": {
               "raw": "http://localhost:3010/alunos/6",
@@ -81,7 +86,7 @@
           "response": []
         },
         {
-          "name": "New Request",
+          "name": "Apagar curso",
           "request": {
             "method": "DELETE",
             "header": [],
@@ -95,6 +100,35 @@
               "path": [
                 "alunos",
                 "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar um campo",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"idade\": 21\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:3010/alunos/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "3010",
+              "path": [
+                "alunos",
+                "2"
               ]
             }
           },
