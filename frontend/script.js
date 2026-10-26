@@ -1,3 +1,15 @@
+const divalunos = document.getElementById("alunos");
+
+
+const botaoCriarAluno = document.getElementById("criarAluno");
+botaoCriarAluno.addEventListener("click", async () => {
+    const nome = document.getElementById("nomeAluno").value;
+    const curso = document.getElementById("cursoAluno").value;
+    const idade = document.getElementById("idadeAluno").value;
+    await criaAluno({ preventDefault: () => {} }, nome, curso, idade);
+});
+
+
 document.addEventListener("DOMContentLoaded", () => {
     // Carregae ambas as listas
     mostraAlunos();
@@ -25,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Get - Buscar Alunos
 async function getAlunos() {
     try {
-        const response = await fetch("http://localhost:3000/alunos");
+        const response = await fetch("http://localhost:3010/alunos");
         if (!response.ok) throw new Error("Erro ao buscar alunos");
         return await response.json();
     } catch (error) {
@@ -74,7 +86,7 @@ async function salvaAluno(e) {
 
     const alunoData = { nome: nomeInput };
 
-    const url = idInput ? `http://localhost:3000/alunos/${idInput}` : "http://localhost:3000/alunos";
+    const url = idInput ? `http://localhost:3010/alunos/${idInput}` : "http://localhost:3010/alunos";
     const method = idInput ? "PUT" : "POST";
 
     try {
@@ -100,7 +112,7 @@ async function salvaAluno(e) {
 // Delete
 async function apagaAluno(e) {
     const alunosId = e.target.dataset.id;
-    const url = `http://localhost:3000/alunos/${alunosId}`;
+    const url = `http://localhost:3010/alunos/${alunosId}`;
 
     try {
         const response = await fetch(url, { method: "DELETE" });
@@ -113,6 +125,35 @@ async function apagaAluno(e) {
         console.error("Erro de rede:", error);
     }
 }
+
+
+// Cria aluno
+async function criaAluno(evento){
+    evento.preventDefault();
+    const nome = document.getElementById("nomeAluno").value;
+    const curso = document.getElementById("cursoAluno").value;
+    const idade = document.getElementById("idadeAluno").value;
+
+    const novoAluno = {
+        nome: nomeAluno,
+        cursoId: cursoAluno,
+        idade: idadeAluno
+    }
+
+    const jsonAluno = JSON.stringify(novoAluno);
+    console.log(jsonAluno);
+
+    const response = await fetch("http://localhost:3010/alunos", {
+        method: "POST",
+        "body": jsonAluno,
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+}
+
+criaAluno;
+
 
 function preencheFormularioAluno(aluno) {
     document.getElementById("aluno-id").value = aluno.id;
@@ -129,7 +170,7 @@ function preencheFormularioAluno(aluno) {
 // Get- Buscar Cursos
 async function getCursos() {
     try {
-        const response = await fetch("http://localhost:3000/cursos");
+        const response = await fetch("http://localhost:3010/cursos");
         if (!response.ok) throw new Error("Erro ao buscar cursos");
         return await response.json();
     } catch (error) {
@@ -178,7 +219,7 @@ async function salvaCurso(e) {
 
     const cursoData = { nome: nomeInput };
 
-    const url = idInput ? `http://localhost:3000/cursos/${idInput}` : "http://localhost:3000/cursos";
+    const url = idInput ? `http://localhost:3010/cursos/${idInput}` : "http://localhost:3010/cursos";
     const method = idInput ? "PUT" : "POST";
 
     try {
@@ -204,7 +245,7 @@ async function salvaCurso(e) {
 // Delete - Apagar curso
 async function apagaCurso(e) {
     const cursoId = e.target.dataset.id;
-    const url = `http://localhost:3000/cursos/${cursoId}`;
+    const url = `http://localhost:3010/cursos/${cursoId}`;
 
     try {
         const response = await fetch(url, { method: "DELETE" });
