@@ -38,6 +38,14 @@ The project simulates the full lifecycle of a web application with separate fron
   - Configuration files (`package.json`, json-server script)
   - Postman collection `.json` in `/tests/`
 
+To start the mock API and serve the frontend from the project root, run:
+
+```bash
+npm start
+```
+
+The API and frontend are available at `http://localhost:3010`.
+
 ------
 
 ### Part 3: Web Interface (Student CRUD)
@@ -141,4 +149,3 @@ project-root/
 ### Base Repository
 
 Use the initial template repository provided in GitHub Classroom.
-
