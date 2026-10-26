@@ -9,14 +9,6 @@
       "idade": 21
     },
     {
-      "id": 2,
-      "nome": "Diogo",
-      "apelido": "Pereira",
-      "idCurso": 3,
-      "anoCurricular": 3,
-      "idade": 21
-    },
-    {
       "id": 3,
       "nome": "Duarte",
       "apelido": "Costa",
@@ -31,14 +23,6 @@
       "idCurso": 4,
       "anoCurricular": 3,
       "idade": 23
-    },
-    {
-      "id": 5,
-      "nome": "Sofia",
-      "apelido": "Gomes",
-      "idCurso": 1,
-      "anoCurricular": 1,
-      "idade": 18
     }
   ],
   "cursos": [
