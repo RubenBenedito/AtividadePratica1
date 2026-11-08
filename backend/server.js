@@ -1,19 +1,24 @@
 // API real a ser implementada
+// const dns = require('node:dns');
+
+// dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 const express = require('express');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config();
-console.log('PORT:', process.env.PORT);
 
 const app = express()
-const port = process.env.PORT
+const port = process.env.PORT || 3010
+console.log(process.env.PORT);
 
 async function connect() {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log("Conectado ao MongoDB");
 }
+
+connect();
 
 const alunoSchema = new mongoose.Schema({
     nome: String,
@@ -28,9 +33,8 @@ app.get('/', (req, res) => {
 })
 
 app.get('/alunos', async (req, res) => {
-    todosalunos = await Aluno.find({});
-    console.log(todosalunos);
-    res.json(todosalunos);
+    const todosAlunos = await Aluno.find();
+    res.json(todosAlunos);
 })
 
 app.get('/alunos/:id', (req, res) => {
