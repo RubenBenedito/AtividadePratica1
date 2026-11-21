@@ -37,6 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Get - Buscar Alunos
 async function getAlunos() {
     try {
+        //const response = await fetch("/http://localhost:3010/alunos");
         const response = await fetch("/alunos");
         if (!response.ok) throw new Error("Erro ao buscar alunos");
         return await response.json();
@@ -62,6 +63,7 @@ async function mostraAlunos() {
         // Botão Apagar
         const bApagar = document.createElement("button");
         bApagar.textContent = "Apagar";
+        // bApagar.dataset.id = aluno.id;
         bApagar.dataset.id = aluno._id;
         bApagar.addEventListener("click", apagaAluno);
 
