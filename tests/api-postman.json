@@ -35,7 +35,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"nome\": \"Carlos\",\r\n  \"apelido\": \"Mendes\",\r\n  \"idCurso\": 3,\r\n  \"anoCurricular\": 1,\r\n  \"idade\": 20\r\n}\r\n",
+              "raw": "{\r\n  \"nome\": \"Carlos\",\r\n  \"apelido\": \"Mendes\",\r\n  \"idCurso\": \"<ID_OBJECTID_REAL_DO_CURSO>\",\r\n  \"anoCurricular\": 1,\r\n  \"idade\": 20\r\n}\r\n",
               "options": {
                 "raw": {
                   "language": "json"
@@ -63,7 +63,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"nome\": \"Carlos\",\r\n  \"apelido\": \"Mendes\",\r\n  \"idCurso\": 3,\r\n  \"anoCurricular\": 1,\r\n  \"idade\": 20\r\n}\r\n",
+              "raw": "{\r\n  \"nome\": \"Carlos\",\r\n  \"apelido\": \"Mendes\",\r\n  \"idCurso\": \"<ID_OBJECTID_REAL_DO_CURSO>\",\r\n  \"anoCurricular\": 1,\r\n  \"idade\": 20\r\n}\r\n",
               "options": {
                 "raw": {
                   "language": "text"
@@ -71,7 +71,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3010/alunos/6",
+              "raw": "http://localhost:3010/alunos/{{alunoId}}",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -79,7 +79,7 @@
               "port": "3010",
               "path": [
                 "alunos",
-                "6"
+                "{{alunoId}}"
               ]
             }
           },
@@ -91,7 +91,7 @@
             "method": "DELETE",
             "header": [],
             "url": {
-              "raw": "http://localhost:3010/alunos/6",
+              "raw": "http://localhost:3010/alunos/{{alunoId}}",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -99,7 +99,7 @@
               "port": "3010",
               "path": [
                 "alunos",
-                "6"
+                "{{alunoId}}"
               ]
             }
           },
@@ -120,7 +120,7 @@
               }
             },
             "url": {
-              "raw": "http://localhost:3010/alunos/2",
+              "raw": "http://localhost:3010/alunos/{{alunoId}}",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -128,7 +128,7 @@
               "port": "3010",
               "path": [
                 "alunos",
-                "2"
+                "{{alunoId}}"
               ]
             }
           },
@@ -196,7 +196,7 @@
               "raw": "{\r\n  \"nomeDoCurso\": \"Engenharia Civil\"\r\n}\r\n"
             },
             "url": {
-              "raw": "http://localhost:3010/cursos/5",
+              "raw": "http://localhost:3010/cursos/{{cursoId}}",
               "protocol": "http",
               "host": [
                 "localhost"
@@ -204,7 +204,7 @@
               "port": "3010",
               "path": [
                 "cursos",
-                "5"
+                "{{cursoId}}"
               ]
             }
           },

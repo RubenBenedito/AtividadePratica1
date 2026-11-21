@@ -17,8 +17,12 @@
   let alunoForm = $state({ nome: '', apelido: '', idCurso: '', anoCurricular: '', idade: '' });
   let cursoForm = $state({ nomeDoCurso: '' });
 
+  const idDocumento = (documento) => documento?._id ?? documento?.id;
+
   const cursoNome = (idCurso) =>
-    cursos.find((curso) => String(curso.id) === String(idCurso))?.nomeDoCurso ?? 'Curso não associado';
+    typeof idCurso === 'object'
+      ? idCurso?.nomeDoCurso ?? 'Curso não associado'
+      : cursos.find((curso) => String(idDocumento(curso)) === String(idCurso))?.nomeDoCurso ?? 'Curso não associado';
 
   function mostrarSucesso(mensagem) {
     successMessage = mensagem;
@@ -63,11 +67,11 @@
 
   function editarAluno(aluno) {
     modoFormulario = 'editar';
-    registoEmEdicao = aluno.id;
+    registoEmEdicao = idDocumento(aluno);
     alunoForm = {
       nome: aluno.nome ?? '',
       apelido: aluno.apelido ?? '',
-      idCurso: aluno.idCurso ?? aluno.cursoId ?? '',
+      idCurso: typeof aluno.idCurso === 'object' ? aluno.idCurso?._id ?? '' : aluno.idCurso ?? '',
       anoCurricular: aluno.anoCurricular ?? 1,
       idade: aluno.idade ?? '',
     };
@@ -77,7 +81,7 @@
 
   function editarCurso(curso) {
     modoFormulario = 'editar';
-    registoEmEdicao = curso.id;
+    registoEmEdicao = idDocumento(curso);
     cursoForm = { nomeDoCurso: curso.nomeDoCurso ?? '' };
     formError = '';
     mostrarFormulario = true;
@@ -98,7 +102,7 @@
         body: JSON.stringify({
           nome: alunoForm.nome.trim(),
           apelido: alunoForm.apelido.trim(),
-          idCurso: Number(alunoForm.idCurso),
+          idCurso: alunoForm.idCurso,
           anoCurricular: Number(alunoForm.anoCurricular) || 1,
           idade: Number(alunoForm.idade),
         }),
@@ -145,10 +149,10 @@
 
   async function remover(registo, tipo) {
     try {
-      const response = await fetch(`${api}/${tipo}/${registo.id}`, { method: 'DELETE' });
+      const response = await fetch(`${api}/${tipo}/${idDocumento(registo)}`, { method: 'DELETE' });
       if (!response.ok) throw new Error(`Não foi possível remover ${tipo === 'alunos' ? 'o aluno' : 'o curso'}.`);
-      if (tipo === 'alunos') alunos = alunos.filter((aluno) => aluno.id !== registo.id);
-      else cursos = cursos.filter((curso) => curso.id !== registo.id);
+      if (tipo === 'alunos') alunos = alunos.filter((aluno) => idDocumento(aluno) !== idDocumento(registo));
+      else cursos = cursos.filter((curso) => idDocumento(curso) !== idDocumento(registo));
       mostrarSucesso(`${tipo === 'alunos' ? 'Aluno' : 'Curso'} removido com sucesso.`);
     } catch (requestError) {
       error = requestError.message;
@@ -211,8 +215,8 @@
         </div>
         {#if loading}<p class="text-slate-400">A carregar alunos...</p>
         {:else if alunos.length === 0}<div class="rounded-2xl border border-dashed border-white/20 p-10 text-center text-slate-400">Ainda não existem alunos.</div>
-        {:else}<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{#each alunos as aluno (aluno.id)}
-          <article class="flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5"><div class="flex justify-between gap-3"><div><h3 class="text-lg font-semibold">{aluno.nome} {aluno.apelido ?? ''}</h3><p class="mt-1 text-sm text-slate-400">{cursoNome(aluno.idCurso ?? aluno.cursoId)}</p></div></div><div class="mt-6"><div class="mb-2 flex justify-between text-xs text-slate-400"><span>Idade</span><strong class="text-slate-200">{aluno.idade} anos</strong></div><meter class="age-meter h-3 w-full" min="17" max="60" value={aluno.idade}></meter></div><p class="mt-4 text-xs text-slate-500">{aluno.anoCurricular ?? 1}º ano curricular</p><div class="mt-5 flex gap-2 border-t border-white/10 pt-4"><button class="flex-1 rounded-lg bg-cyan-400 px-3 py-2 text-sm font-bold text-slate-950 hover:bg-cyan-300" onclick={() => editarAluno(aluno)}>Atualizar</button><button class="flex-1 rounded-lg border border-red-400/40 px-3 py-2 text-sm font-semibold text-red-300 hover:bg-red-400/10" onclick={() => remover(aluno, 'alunos')}>Remover</button></div></article>
+        {:else}<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{#each alunos as aluno (idDocumento(aluno))}
+          <article class="flex flex-col rounded-2xl border border-white/10 bg-white/5 p-5"><div class="flex justify-between gap-3"><div><h3 class="text-lg font-semibold">{aluno.nome} {aluno.apelido ?? ''}</h3><p class="mt-1 text-sm text-slate-400">{cursoNome(aluno.idCurso)}</p></div></div><div class="mt-6"><div class="mb-2 flex justify-between text-xs text-slate-400"><span>Idade</span><strong class="text-slate-200">{aluno.idade} anos</strong></div><meter class="age-meter h-3 w-full" min="17" max="60" value={aluno.idade}></meter></div><p class="mt-4 text-xs text-slate-500">{aluno.anoCurricular ?? 1}º ano curricular</p><div class="mt-5 flex gap-2 border-t border-white/10 pt-4"><button class="flex-1 rounded-lg bg-cyan-400 px-3 py-2 text-sm font-bold text-slate-950 hover:bg-cyan-300" onclick={() => editarAluno(aluno)}>Atualizar</button><button class="flex-1 rounded-lg border border-red-400/40 px-3 py-2 text-sm font-semibold text-red-300 hover:bg-red-400/10" onclick={() => remover(aluno, 'alunos')}>Remover</button></div></article>
         {/each}</div>{/if}
       </section>
     {:else}
@@ -223,8 +227,8 @@
         </div>
         {#if loading}<p class="text-slate-400">A carregar cursos...</p>
         {:else if cursos.length === 0}<div class="rounded-2xl border border-dashed border-white/20 p-10 text-center text-slate-400">Ainda não existem cursos.</div>
-        {:else}<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{#each cursos as curso (curso.id)}
-          <article class="flex min-h-36 flex-col rounded-2xl border border-white/10 bg-white/5 p-5"><div class="flex justify-between gap-3"><h3 class="text-lg font-semibold">{curso.nomeDoCurso}</h3></div><p class="mt-6 text-sm text-slate-500">{alunos.filter((aluno) => String(aluno.idCurso ?? aluno.cursoId) === String(curso.id)).length} alunos inscritos</p><div class="mt-5 flex gap-2 border-t border-white/10 pt-4"><button class="flex-1 rounded-lg bg-indigo-400 px-3 py-2 text-sm font-bold text-slate-950 hover:bg-indigo-300" onclick={() => editarCurso(curso)}>Atualizar</button><button class="flex-1 rounded-lg border border-red-400/40 px-3 py-2 text-sm font-semibold text-red-300 hover:bg-red-400/10" onclick={() => remover(curso, 'cursos')}>Remover</button></div></article>
+        {:else}<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{#each cursos as curso (idDocumento(curso))}
+          <article class="flex min-h-36 flex-col rounded-2xl border border-white/10 bg-white/5 p-5"><div class="flex justify-between gap-3"><h3 class="text-lg font-semibold">{curso.nomeDoCurso}</h3></div><p class="mt-6 text-sm text-slate-500">{alunos.filter((aluno) => typeof aluno.idCurso === 'object' ? String(idDocumento(aluno.idCurso)) === String(idDocumento(curso)) : String(aluno.idCurso) === String(idDocumento(curso))).length} alunos inscritos</p><div class="mt-5 flex gap-2 border-t border-white/10 pt-4"><button class="flex-1 rounded-lg bg-indigo-400 px-3 py-2 text-sm font-bold text-slate-950 hover:bg-indigo-300" onclick={() => editarCurso(curso)}>Atualizar</button><button class="flex-1 rounded-lg border border-red-400/40 px-3 py-2 text-sm font-semibold text-red-300 hover:bg-red-400/10" onclick={() => remover(curso, 'cursos')}>Remover</button></div></article>
         {/each}</div>{/if}
       </section>
     {/if}
@@ -249,7 +253,7 @@
             <div class="grid gap-4 md:grid-cols-2">
               <label class="text-sm text-slate-300">Nome<input class="form-input" bind:value={alunoForm.nome} placeholder="Nome" /></label>
               <label class="text-sm text-slate-300">Apelido<input class="form-input" bind:value={alunoForm.apelido} placeholder="Apelido" /></label>
-              <label class="text-sm text-slate-300">Curso<select class="form-input" bind:value={alunoForm.idCurso}><option value="">Selecionar curso</option>{#each cursos as curso}<option value={curso.id}>{curso.nomeDoCurso}</option>{/each}</select></label>
+              <label class="text-sm text-slate-300">Curso<select class="form-input" bind:value={alunoForm.idCurso}><option value="">Selecionar curso</option>{#each cursos as curso}<option value={idDocumento(curso)}>{curso.nomeDoCurso}</option>{/each}</select></label>
               <label class="text-sm text-slate-300">Idade<input class="form-input" type="number" min="1" max="120" bind:value={alunoForm.idade} placeholder="21" /></label>
               <label class="text-sm text-slate-300">Ano curricular<input class="form-input" type="number" min="1" max="6" bind:value={alunoForm.anoCurricular} placeholder="1" /></label>
             </div>

@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Get - Buscar Alunos
 async function getAlunos() {
     try {
-        const response = await fetch("http://localhost:3010/alunos");
+        const response = await fetch("/alunos");
         if (!response.ok) throw new Error("Erro ao buscar alunos");
         return await response.json();
     } catch (error) {
@@ -62,7 +62,7 @@ async function mostraAlunos() {
         // Botão Apagar
         const bApagar = document.createElement("button");
         bApagar.textContent = "Apagar";
-        bApagar.dataset.id = aluno.id;
+        bApagar.dataset.id = aluno._id;
         bApagar.addEventListener("click", apagaAluno);
 
         // Botão Editar
@@ -84,9 +84,11 @@ async function salvaAluno(e) {
     const idInput = document.getElementById("aluno-id").value;
     const nomeInput = document.getElementById("aluno-nome").value;
 
+    const cursoInput = document.getElementById("aluno-curso")?.value;
     const alunoData = { nome: nomeInput };
+    if (cursoInput) alunoData.idCurso = cursoInput;
 
-    const url = idInput ? `http://localhost:3010/alunos/${idInput}` : "http://localhost:3010/alunos";
+    const url = idInput ? `/alunos/${idInput}` : "/alunos";
     const method = idInput ? "PUT" : "POST";
 
     try {
@@ -112,7 +114,7 @@ async function salvaAluno(e) {
 // Delete
 async function apagaAluno(e) {
     const alunosId = e.target.dataset.id;
-    const url = `http://localhost:3010/alunos/${alunosId}`;
+    const url = `/alunos/${alunosId}`;
 
     try {
         const response = await fetch(url, { method: "DELETE" });
@@ -135,15 +137,15 @@ async function criaAluno(evento){
     const idade = document.getElementById("idadeAluno").value;
 
     const novoAluno = {
-        nome: nomeAluno,
-        cursoId: cursoAluno,
-        idade: idadeAluno
-    }
+        nome,
+        idCurso: curso,
+        idade: Number(idade)
+    };
 
     const jsonAluno = JSON.stringify(novoAluno);
     console.log(jsonAluno);
 
-    const response = await fetch("http://localhost:3010/alunos", {
+    const response = await fetch("/alunos", {
         method: "POST",
         "body": jsonAluno,
         headers: {
@@ -156,7 +158,7 @@ criaAluno;
 
 
 function preencheFormularioAluno(aluno) {
-    document.getElementById("aluno-id").value = aluno.id;
+    document.getElementById("aluno-id").value = aluno._id;
     document.getElementById("aluno-nome").value = aluno.nome;
 }
 
@@ -170,7 +172,7 @@ function preencheFormularioAluno(aluno) {
 // Get- Buscar Cursos
 async function getCursos() {
     try {
-        const response = await fetch("http://localhost:3010/cursos");
+        const response = await fetch("/cursos");
         if (!response.ok) throw new Error("Erro ao buscar cursos");
         return await response.json();
     } catch (error) {
@@ -195,7 +197,7 @@ async function mostraCursos() {
         // Botão Apagar
         const bApagar = document.createElement("button");
         bApagar.textContent = "Apagar";
-        bApagar.dataset.id = curso.id;
+        bApagar.dataset.id = curso._id;
         bApagar.addEventListener("click", apagaCurso);
 
         // Botão Editar
@@ -219,7 +221,7 @@ async function salvaCurso(e) {
 
     const cursoData = { nome: nomeInput };
 
-    const url = idInput ? `http://localhost:3010/cursos/${idInput}` : "http://localhost:3010/cursos";
+    const url = idInput ? `/cursos/${idInput}` : "/cursos";
     const method = idInput ? "PUT" : "POST";
 
     try {
@@ -245,7 +247,7 @@ async function salvaCurso(e) {
 // Delete - Apagar curso
 async function apagaCurso(e) {
     const cursoId = e.target.dataset.id;
-    const url = `http://localhost:3010/cursos/${cursoId}`;
+    const url = `/cursos/${cursoId}`;
 
     try {
         const response = await fetch(url, { method: "DELETE" });
@@ -260,6 +262,6 @@ async function apagaCurso(e) {
 }
 
 function preencheFormularioCurso(curso) {
-    document.getElementById("curso-id").value = curso.id;
+    document.getElementById("curso-id").value = curso._id;
     document.getElementById("curso-nome").value = curso.nome;
 }
