@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: atividade-pratica-1
+    runtime: node
+    buildCommand: npm ci && npm ci --prefix mock-server && npm run build
+    startCommand: npm --prefix mock-server run start:render
+    envVars:
+      - key: NODE_VERSION
+        value: 22
