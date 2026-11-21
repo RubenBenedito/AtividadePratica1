@@ -54,7 +54,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const path = require('node:path');
 
-dotenv.config();
+// dotenv.config(); // Carrega variáveis de ambiente do arquivo .env
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 const port = process.env.PORT || 3010;
@@ -90,8 +91,8 @@ const cursoSchema = new mongoose.Schema({
     nomeDoCurso: { type: String, required: true, trim: true }
 }, { timestamps: true });
 
-const Aluno = mongoose.model('Aluno', alunoSchema);
-const Curso = mongoose.model('Curso', cursoSchema);
+const Aluno = mongoose.model('Aluno', alunoSchema, 'Alunos');
+const Curso = mongoose.model('Curso', cursoSchema, 'Cursos');
 
 async function validarCurso(idCurso) {
     if (!mongoose.isValidObjectId(idCurso)) {
